@@ -1,0 +1,111 @@
+body {
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: rgb(253,164,3);
+    background: radial-gradient(circle, rgba(253,164,3,1) 0%, rgba(232,117,26,0.7539390756302521) 50%, rgba(229,194,135,1) 100%);
+}
+
+div {
+    text-align: center;
+}
+
+.card {
+    text-align: left;
+    background-color: transparent;
+    padding: 20px;
+    width: 300px;
+}
+
+.image {
+    margin: auto;
+    padding: 0;
+}
+
+img {
+    width: 200px;  
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+input {
+    color: #000000;
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 1px solid #000000;
+    border: solid 1.5px #000000;
+    outline: none;
+    border-radius: 1rem;
+    background: none;
+}
+::placeholder {
+    color: #000000;
+}
+
+button {
+    padding: 17px 40px;
+    border-radius: 50px;
+    cursor: pointer;
+    border: 0;
+    background-color: white;
+    box-shadow: rgb(0 0 0 / 5%) 0 0 8px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-size: 15px;
+    transition: all 0.5s ease;
+    width: 100%;
+  }
+  
+  button:hover {
+    letter-spacing: 3px;
+    background-color: black;
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 7px 29px 0px;
+  }
+  
+  button:active {
+    letter-spacing: 3px;
+    background-color: hsl(261deg 80% 48%);
+    color: hsl(0, 0%, 100%);
+    box-shadow: rgb(93 24 220) 0px 0px 0px 0px;
+    transform: translateY(10px);
+    transition: 100ms;
+  }
+  
+  
+
+h2 {
+    color: #333;
+    margin-top: 20px;
+}
+#member_details {
+    text-align: left;
+}
+#countdown {
+    color: red;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
+
+
