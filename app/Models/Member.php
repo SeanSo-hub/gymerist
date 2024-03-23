@@ -22,29 +22,32 @@ class Member extends Model
         'code',
         'firstname',
         'lastname',
-        'fullname',
         'contact_number',
         'email',
-        'member_id',
-        'fullname',
-        'subscription_status',
+        'payment_type',
+        'amount',
         'subscription_date',
+        'subscription_status',
         'subscription_end_date'
     ];
 
-    public function payments() {
+    public function payments()
+    {
         return $this->hasMany(Payment::class);
     }
 
-    public function membership() {
+    public function membership()
+    {
         return $this->hasMany(Membership::class);
     }
 
-    public function getFullNameAttribute() {   
+    public function getFullNameAttribute()
+    {
         return $this->attributes['fullname'] = $this->firstname . ' ' . $this->lastname;
     }
 
-    protected static function boot() {
+    protected static function boot()
+    {
         parent::boot();
 
         // Creating event to generate and set the member code
@@ -58,22 +61,65 @@ class Member extends Model
         });
     }
 
-    public function generateAndSetMemberCode() {
+    public function generateAndSetMemberCode()
+    {
         $memberCode = now()->format('md') . '-' . str_pad(0, 4, '0', STR_PAD_LEFT);
-        
+
         $this->attributes['code'] = $memberCode;
     }
 
-    public function addToCheckins() {
-        $checkin = new Checkin();
-        $checkin->fullname = $this->firstname . ' ' . $this->lastname;
-        $formattedDate = Carbon::now()->format('Y-m-d H:i:s');
-        $checkin->date = $formattedDate;
-        $checkin->save();
+    public function storePaymentInfo($paymentType, $amount, $transactionCode = null)
+    {
+
+        $this->payment_type = $paymentType;
+        $this->amount = $amount;
+
+        if ($paymentType !== null) {
+
+            $this->subscription_status = 'active';
+
+            $this->subscription_start_date = now();
+            $this->subscription_end_date = now()->addYear();
+        } else {
+
+        }
+
+        if (!is_null($transactionCode)) {
+            $this->transaction_code = $transactionCode;
+        }
+
+        $this->save();
+
+        return $this;
     }
 
-    public function getStatusAttribute() {
-        return $this->payments->first() ? $this->payments->first()->status : '-'; // Display '-' or desired placeholder if no payment
-    }    
+    public static function getTotalSubscription()
+    {
+        return self::sum('amount');
+    }
+
+    public static function getTotalRevenue()
+    {
+        $subscriptionTotals = self::getTotalSubscription();
+        $planPaymentTotals = Payment::getTotalPlanRevenue();
+
+        return $subscriptionTotals + $planPaymentTotals;
+    }
+
+    
+    // public static function getTotalCashPaymentsForAllMembers()
+    // {
+    //     $totalCashPayments = $member->getTotalAmountForCash();
+    //     $members = Member::all();
+
+    //     foreach ($members as $member) {
+    //         $totalCashPayments = $member->getTotalAmountForCash();
+    //     }
+
+    //     return $totalCashPayments;
+    // }
+
+    
+
 
 }

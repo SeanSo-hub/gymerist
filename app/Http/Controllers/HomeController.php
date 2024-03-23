@@ -17,28 +17,29 @@ class HomeController extends Controller
     {
         $code = $request->input('code');
 
-        // Retrieve the member details based on the code
+
         $member = Member::where('code', $code)->first();
 
         if (!$member) {
-            // Handle the case where the member doesn't exist
+
             return view('home', ['code' => $code, 'message' => 'User does not exist']);
         }
 
-        // Check if the member's status is active
-        $membership = Payment::where('member_id', $member->id)->first();
 
-        if (!$membership || $membership->status !== 'active') {
-            // If membership is not active, set membership to null
-            $membership = null;
+        $payment = Payment::where('member_id', $member->id)->first();
+
+        if (!$payment || $payment->plan_status !== 'active') {
+
+            $payment = null;
         } else {
-            // If the status is active, proceed with check-in
-            $member->addToCheckins();
+
+            $memberId = $member->id;  // Retrieve the member ID
+            $payment->addToCheckins($memberId); 
         }
 
-        // Return the view with the necessary data
-        return view('home', ['code' => $code, 'member' => $member, 'membership' => $membership]);
+
+        return view('home', ['code' => $code, 'member' => $member, 'payment' => $payment]);
     }
 
-    // Other controller methods...
+
 }

@@ -27,6 +27,7 @@ class MembershipCrudController extends CrudController
     public function setup()
     {
         CRUD::setModel(\App\Models\Membership::class);
+        CRUD::setModel(\App\Models\Member::class);
         CRUD::setModel(\App\Models\Payment::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/membership');
         CRUD::setEntityNameStrings('membership', 'memberships');
@@ -42,28 +43,52 @@ class MembershipCrudController extends CrudController
 
 
     protected function setupListOperation()
-    {
-        // CRUD::setFromDb(); // set columns from db columns.
-        CRUD::column([
+    {   
+        CRUD::addcolumn([
             'name' => 'fullname', 
             'label' => "Fullname", 
             'attribute' => 'fullname',
             'entity' => 'member'
         ]);
-        CRUD::column([
-            'name' => 'date', 
-            'label' => "Start Date", 
-            'type' => 'text'
+
+        CRUD::addcolumn([
+            'name' => 'subscription_status', 
+            'label' => "Subscription Status", 
+            'attribute' => 'subscription_status',
+            'entity' => 'member'
         ]);
-        CRUD::column([
-            'name' => 'end_date', 
-            'label' => "End Date", 
-            'type' => 'text',
-        ]);CRUD::column([
-            'name' => 'status', 
-            'label' => "Status", 
-            'type' => 'text',
+
+        CRUD::addcolumn([
+            'name' => 'plan_status', 
+            'label' => "Plan Status", 
+            // 'attribute' => 'plan_status',
+            // 'entity' => 'member'
         ]);
+
+        // CRUD::addcolumn([
+        //     'name' => 'plan_type', 
+        //     'label' => "Plan", 
+        //     'attribute' => 'plan_type',
+        //     'entity' => 'payment'
+        // ]);
+
+        
+
+        CRUD::setFromDb(); // set columns from db columns.
+
+
+        $this->crud->removeColumn('plan_start_date');    
+        $this->crud->removeColumn('firstname');
+        $this->crud->removeColumn('lastname');
+        $this->crud->removeColumn('code');
+        $this->crud->removeColumn('contact_number');
+        $this->crud->removeColumn('email');
+        $this->crud->removeColumn('amount');
+        $this->crud->removeColumn('member_id'); 
+        // $this->crud->removeColumn('plan_type'); 
+        $this->crud->removeColumn('payment_type'); 
+        $this->crud->removeColumn('transaction_code');
+
 
         /**
          * Columns can be defined using the fluent syntax:

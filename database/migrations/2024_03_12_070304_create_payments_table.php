@@ -16,13 +16,14 @@ class CreatePaymentsTable extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('member_id');
-            $table->string('amount');
-            $table->date('date');
-            $table->enum('mode', ['cash', 'gcash']);
+            $table->decimal('amount', 10, 2)->nullable();;
+            $table->enum('plan_type', ['monthly', 'quarterly', 'half-year', 'annual'])->default('monthly');;
+            $table->date('plan_start_date')->nullable();;
+            $table->date('plan_end_date')->nullable();;           
+            $table->enum('payment_type', ['cash', 'gcash'])->nullable();
             $table->string('transaction_code')->nullable();
-            $table->enum('type', ['annual', 'bi-monthly', 'monthly']);
+            $table->enum('plan_status', ['active', 'expired'])->nullable();
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
-            $table->enum('status', ['active', 'expired']);
             $table->timestamps();
         });
     }

@@ -41,40 +41,19 @@ class PaymentCrudController extends CrudController
      * @return void
      */
     protected function setupListOperation()
-    {
-        // CRUD::setFromDb(); // set columns from db columns.
-        CRUD::addcolumn([
-            'name' => 'code',
-            'label' => "Code",
-            'entity' => 'member',
-            'attribute' => 'code'
-        ]);
+    {   
+
         CRUD::addcolumn([
             'name' => 'fullname',
             'label' => "Name",
             'entity' => 'member',
             'attribute' => 'fullname'
         ]);
-        CRUD::addcolumn([
-            'name' => 'date',
-            'label' => "Date",
-        ]);
-        CRUD::addcolumn([
-            'name' => 'amount',
-            'label' => "Amount",
-        ]);
-        CRUD::addcolumn([
-            'name' => 'mode',
-            'label' => "Payment Mode",
-        ]);
-        CRUD::addcolumn([
-            'name' => 'transaction_code',
-            'label' => "Transaction Code",
-        ]);
-        CRUD::addcolumn([
-            'name' => 'type',
-            'label' => "Plan",
-        ]);
+
+        CRUD::setFromDb(); // set columns from db columns.
+
+        $this->crud->removeColumn('member_id');
+        // $this->crud->removeColumn('amount');
 
         /**
          * Columns can be defined using the fluent syntax:
@@ -90,8 +69,8 @@ class PaymentCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        CRUD::setValidation(PaymentRequest::class);
-        // CRUD::setFromDb(); // set fields from db columns.
+        // CRUD::setValidation(PaymentRequest::class);
+        // // CRUD::setFromDb(); // set fields from db columns.
 
         CRUD::addfield([
             'name' => 'member_id',
@@ -104,13 +83,10 @@ class PaymentCrudController extends CrudController
         CRUD::field('amount')   
             ->type('number')
             ->label('Amount');
-        CRUD::field('date')
-            ->type('date')
-            ->label('Date');
 
         CRUD::addfield([   // select_from_array
-            'name'        => 'mode',
-            'label'       => "Mode",
+            'name'        => 'payment_type',
+            'label'       => "Payment type",
             'type'        => 'enum',
             'options'     => [
                 'cash' => 'Cash', 
@@ -125,13 +101,14 @@ class PaymentCrudController extends CrudController
             ->label('Transaction Code');
 
         CRUD::field([   // select_from_array
-            'name'        => 'type',
-            'label'       => "Type",
+            'name'        => 'plan_type',
+            'label'       => "Plan type",
             'type'        => 'enum',
             'options'     => [
-                'annual' => 'Annually', 
-                'bi-monthly' => 'Bi-monthly',
-                'monthly' => 'Monthly'],
+                'monthly' => 'Monthly', 
+                'quarterly' => 'Quarterly',
+                'half-year' => 'Half year',
+                'annual' => 'Annual',],
             'allows_null' => false,
             'default'     => 'monthly',
             // 'allows_multiple' => true, // OPTIONAL; needs you to cast this to array in your model;

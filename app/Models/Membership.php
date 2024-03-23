@@ -24,9 +24,9 @@ class Membership extends Model
     protected $guarded = ['id'];
     protected $fillable = [
         'fullname',
-        'date',
+        'start_date',
         'end_date',
-        'status'   
+        'plan_status'
     ];
     // protected $hidden = [];
 
@@ -35,9 +35,28 @@ class Membership extends Model
         return $this->belongsTo(Member::class);
     }
     
-    public function payment()
+    // public function payment()
+    // {
+    //     return $this->belongsTo(Payment::class);
+    // }
+
+    protected static function boot()
     {
-        return $this->belongsTo(Payment::class);
+        parent::boot();
+
+        static::created(function ($membership) { // Capture $payment here
+            $membership->start_date = Carbon::now();
+
+            $membership = new Membership();
+            $membership->member_id = $membership->member_id;
+            $membership->start_date = $membership->start_date;
+            $membership->end_date = $membership->calculateEndDate();
+            $membership->plan_status = 'Active';
+            $membership->save();
+        });
+
     }
 
+    
+ 
 }

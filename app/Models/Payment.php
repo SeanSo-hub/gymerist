@@ -13,62 +13,84 @@ class Payment extends Model
     use HasFactory;
 
     protected $table = 'payments';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = [
-        'member_id',
-        'amount',
-        'date',
-        'mode',
-        'transaction_code',
-        'type',
-        'status',
-    ];
-    // protected $hidden = [];
+    protected $fillable = [];
 
-    //set relation
+
     public function member()
     {
         return $this->belongsTo(Member::class);
     }
 
-    //to get fullname
-    public function getFullNameAttribute()
-    {   
-        return $this->firstname . ' ' . $this->lastname;
-    }
-
-    //calculate end date
-    public function getEndDateAttribute()
+    public function calculateEndDate()
     {
-        $startDate = Carbon::parse($this->date);
+        $plan_type = $this->plan_type;
+        $plan_end_date = null;
 
-        switch ($this->type) {
+        switch ($plan_type) {
             case 'monthly':
-                return $startDate->addMonth()->toDateString();
+                $plan_end_date = Carbon::now()->addMonth();
                 break;
-            case 'bi-monthly':
-                return $startDate->addMonths(2)->toDateString();
+            case 'quarterly':
+                $plan_end_date = Carbon::now()->addMonths(3);
+                break;
+            case 'half-year':
+                $plan_end_date = Carbon::now()->addMonths(6);
                 break;
             case 'annual':
-                return $startDate->addYear()->toDateString();
+                $plan_end_date = Carbon::now()->addYear();
                 break;
             default:
-                return $startDate->addMonth()->toDateString();
+                $plan_end_date = Carbon::now()->addMonth();
                 break;
         }
+
+        return $plan_end_date->toDateString();
     }
 
-    protected static function booted()
+    protected static function boot()
     {
-        static::saving(function ($membership) {
-            if ($membership->end_date && $membership->end_date > now()) {
-                $membership->status = 'active';
-            } else {
-                $membership->status = 'expired';
-            }
+        parent::boot();
+
+        static::created(function ($payment) { // Capture $payment here
+            $payment->plan_start_date = Carbon::now();
+            $payment->plan_end_date = $payment->calculateEndDate();
+            $payment->plan_status = 'Active';
+            $payment->save();
+        });
+
+        static::updating(function ($payment) {
+            if ($payment->isDirty('plan_type')) {
+                $payment->plan_end_date = $payment->calculateEndDate();
+            } 
         });
     }
 
+    public static function getTotalAmountForCash()
+    {
+        return self::where('payment_type', 'cash')->sum('amount');
+    }
+
+    public static function getTotalAmountForGCash()
+    {
+        return self::where('payment_type', 'gcash')->sum('amount');
+    }
+
+    public static function getTotalPlanRevenue()
+    {
+        $cashTotals = self::getTotalAmountForCash();
+        $gcashTotals = self::getTotalAmountForGCash();
+
+        return $cashTotals + $gcashTotals;
+    }
+
+
+    public function addToCheckins($memberId)
+    {
+        $checkin = new Checkin();
+        $checkin->member_id = $memberId; // Use the provided member_id
+        $formattedDate = Carbon::now()->format('Y-m-d H:i:s');
+        $checkin->date = $formattedDate;
+        $checkin->save();
+    }
 }

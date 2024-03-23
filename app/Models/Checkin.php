@@ -17,11 +17,23 @@ class Checkin extends Model
     // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
-        'fullname',
-        'date',
-        'time'
     ];
-    // protected $hidden = [];
+    protected $hidden = [];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
+    public function payment()
+    {
+        return $this->belongsTo(Payment::class);
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
+    }
 
 
 }

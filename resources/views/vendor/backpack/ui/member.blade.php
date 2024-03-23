@@ -12,15 +12,7 @@
 
         .form-group {
             margin-left: 5px;
-            margin-right: 5px;
             flex-grow: 1;
-            
-        }
-
-        .input-group {
-            display: flex;
-            margin-left: 5px;
-            align-content: space-between;
         }
 
         .filter-btn {
@@ -33,12 +25,12 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="">Admin</a></li>
             <li class="breadcrumb-item"><a href="">Reports</a></li>
-            <li class="breadcrumb-item active"><a href="">Daily Checkins</a></li>
+            <li class="breadcrumb-item active"><a href="">Members</a></li>
         </ol>
     </nav>
 
     <!-- Page Heading -->
-    <h1 class="text-capitalize ms-3" bp-section="page-heading">Daily Checkins</h1>
+    <h1 class="text-capitalize ms-3" bp-section="page-heading">Members</h1>
 
     <form class="container-fluid" action="{{ route('checkins.filter') }}" method="GET">
         @csrf
@@ -51,18 +43,17 @@
                 <option value="year">Year</option>
             </select>
         </div>
-
         <div class="form-group" id="custom_filter" style="display: none;">
             <div class="input-group">
                 <label for="start_date">Start Date</label>
                 <input type="date" id="start_date" name="start_date" class="form-control">
+            </div>  
+            <div class="input-group">
                 <label for="end_date">End Date</label>
                 <input type="date" id="end_date" name="end_date" class="form-control">
             </div> 
         </div>
-
-        <div class="form-group" id="month_filter" style="display: none;"> 
-            <label for="month">Month</label>
+        <div class="form-group" id="month_filter" style="display: none;"> <label for="month">Month</label>
             <select id="month" name="month" class="form-control">
                 <option value="">-- Select Month --</option>
                 <option value="1">January</option>
@@ -80,8 +71,7 @@
             </select>
         </div>
 
-        <div class="form-group" id="year_filter" style="display: none;"> 
-            <label for="year">Year</label>
+        <div class="form-group" id="year_filter" style="display: none;"> <label for="year">Year</label>
             <input type="number" min="2000" id="year" name="year" class="form-control">
         </div>
 
@@ -95,28 +85,30 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="card-body">
-                    @if (isset($checkins) && $checkins->count() > 0)
+                    @if (isset($members) && $members->count() > 0)
                         <table class="table table-striped">
                             <thead class="table-header">
                                 <tr>
+                                    <th scope="col">Code</th>
                                     <th scope="col">Fullname</th>
-                                    <th scope="col">Date</th>
-                                    <th scope="col">Time</th>
+                                    <th scope="col">Contact</th>
+                                    <th scope="col">Annual Status</th>
+                                    <th scope="col">Annual end Date</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($checkins as $checkin)
+                                @foreach ($members as $member)
                                     <tr>
-                                        <td>{{ $checkin->member->fullname }}</td>
-                                        <td>{{ $checkin->date ? \Carbon\Carbon::parse($checkin->date)->format('F j, Y') : '' }}
-                                        </td>
-                                        <td>{{ $checkin->date ? \Carbon\Carbon::parse($checkin->date)->format('H:i') : '' }}
-                                        </td>
+                                        <td>{{ $member->code }}</td>
+                                        <td>{{ $member->fullname }}</td>
+                                        <td>{{ $member->contact_number }}</td>
+                                        <td>{{ $member->subscription_status }}</td>
+                                        <td>{{ $member->subscription_end_date }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
-                        {{ $checkins->links() }}
+                        {{ $members->links() }}
                     @else
                         <p>No checkins found.</p>
                     @endif

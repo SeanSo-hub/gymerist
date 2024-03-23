@@ -15,9 +15,9 @@ class CreateCheckinsTable extends Migration
     {
         Schema::create('checkins', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('fullname');
+            $table->unsignedBigInteger('member_id');
             $table->timestamp('date')->nullable(); 
-            $table->timestamp('time')->nullable(); 
+            $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -18,9 +18,9 @@ class CreateMembershipsTable extends Migration
         Schema::create('memberships', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('member_id');
-            $table->timestamp('date')->nullable(); 
+            $table->timestamp('start_date')->nullable(); 
             $table->timestamp('end_date')->nullable();
-            $table->string('status');
+            $table->string('plan_status')->nullable();
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->timestamps();
         });

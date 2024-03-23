@@ -19,7 +19,7 @@ $statuses = [
     <section class="container-fluid">
         <h2>
             <span class="text-capitalize">Members</span>
-            <small>Add subscription{!! $entry->name !!}.</small>
+            <small>Add subscription{!! $member->name !!}.</small>
             @if ($crud->hasAccess('list'))
                 <small>
                     <a href="{{ url($crud->route) }}" class="d-print-none font-sm">
@@ -35,7 +35,7 @@ $statuses = [
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-md-8 bold-labels">
             @if ($errors->any())
                 <div class="alert alert-danger pb-0">
@@ -50,60 +50,82 @@ $statuses = [
                 <div class="card">
                     <div class="card-body row">
                         <div class="form-group col-md-6">
+                            <label for="amount">Name</label>
+                            <h1>{{$member->fullname}}</h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="amount">Code</label>
+                            <h1>{{$member->code}}</h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="amount">Subscription Status</label>
+                            <h1>{{$member->subscription_status}}</h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="amount">Expires on</label>
+                            <h1>{{ $member->subscription_end_date ? \Carbon\Carbon::parse($member->subscription_end_date)->format('F d, Y') : '-' }}</h1>
+                        </div>
+                        @if($member->subscription_status === 'active')
+                        <div class="form-group col-md-6">
+                            <label for="dropdown">Plan</label>
+                            <select name="plan_type" class="form-control" id="">
+                                <option value="">--Select plan--</option>
+                                <option disabled value="subscription">Subscription</option>
+                                <option value="monthly">Monthly</option>
+                                <option value="quarterly">Quarterly</option>
+                                <option value="half_year">Half year</option>
+                                <option value="annual">Annual</option>
+                            </select>
+                        </div>
+                        @else
+                        <div class="form-group col-md-6">
+                            <label for="dropdown">Plan</label>
+                            <select name="" class="form-control" id="">
+                                <option value="">--Select plan--</option>
+                                <option value="subscription">Subscription</option>
+                            </select>
+                        </div>
+                        @endif
+                        <div class="form-group col-md-6">
                             <label for="amount">Amount</label>
-                            <input type="number" name="amount" value="{{ $entry->amount ?? old('amount') }}" id="amount" class="form-control @error('amount') is-invalid @enderror">
+                            <input type="number" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror">
                             @error('amount')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="status">Subscription status</label>
-                            <select name="subscription_status" id="status" class="form-control @error('status') is-invalid @enderror">
-                                <option value="{{ $entry->amount ?? old('amount') }}">-</option>
-                                @foreach ($statuses as $statusValue => $statusText)
-                                    <option value="{{ $statusValue }}" {{ ('subscription_status') == $statusValue ? 'selected' : '' }}>
-                                        {{ $statusText }}
-                                    </option>
-                                @endforeach
+                            <label for="dropdown">Payment type</label>
+                            <select name="payment_type" class="form-control" id="paymentType" onclick="toggleTransactionCode()">
+                                <option value="">--Select payment type--</option>
+                                <option value="cash">Cash</option>
+                                <option value="gcash">Gcash</option>
                             </select>
-                            @error('status')
+                        </div>
+                        <div class="form-group col-md-6" id="transactionCodeField" style="display: none;">
+                            <label for="transactionCode">Transaction Code</label>
+                            <input type="text" name="transaction_code" id="transactionCode" class="form-control @error('transactionCode') is-invalid @enderror">
+                            @error('transactionCode')
                                 <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="form-group col-md-6">
-                            <label for="start_date">Start Date</label>
-                            <input type="date" name="subscription_date" id="start_date" value="" class="form-control @error('start_date') is-invalid @enderror" onchange="calculateEndDate()">
-                            @error('start_date')
-                                <div class="invalid-feedback d-block">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="end_date">End Date</label>
-                            <input type="date" name="subscription_end_date" id="end_date" value="" class="form-control">
-                        </div>
-
-                        <script>
-                            function calculateEndDate() {
-                                const startDate = new Date(document.getElementById('start_date').value);
-                                startDate.setFullYear(startDate.getFullYear() + 1); // Add one year
-                                const endDate = startDate.toISOString().split('T')[0];
-                                document.getElementById('end_date').value = endDate;
-                            }
-                        </script>
-                                                
-                        <div class="form-group col-sm-12">
-                            <label>Message (Optional)</label>
-                            <textarea name="message" class="form-control @error('message') is-invalid @enderror">{{ old('message') }}</textarea>
-                            @error('message')
-                            <div class="invalid-feedback d-block">{{ $message }}</div>
                             @enderror
                         </div>
                     </div>
+                    
+                    <script>
+                        function toggleTransactionCode() {
+                            var paymentType = document.getElementById('paymentType').value;
+                            var transactionCodeField = document.getElementById('transactionCodeField');
+                            if (paymentType === 'cash') {
+                                transactionCodeField.style.display = 'none';
+                            } else {
+                                transactionCodeField.style.display = 'block';
+                            }
+                        }
+                    </script>
+                    
                 </div>
-                <div id="saveActions" class="form-group" style="margin-top: 14px">
-                    <button type="submit" class="btn btn-primary">Add Subscription</button>
+                <div id="saveActions" class="form-group d-flex justify-content-end" style="margin-top: 14px" >
                     <a href="{{ url($crud->route) }}" class="btn btn-default"><span class="la la-ban"></span> &nbsp;Cancel</a>
+                    <button type="submit" class="btn btn-primary">Add Subscription</button>
                 </div>
             </form>
         </div>

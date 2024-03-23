@@ -1,19 +1,19 @@
  // Wait for the page to fully load
  document.addEventListener('DOMContentLoaded', function() {
     // Check if the member details section exists
-    var cat = document.getElementById('cat');
+    var form = document.getElementById('form');
     var memberDetails = document.getElementById('member_details');
 
-    if (cat.style.display === 'none') {
-        cat.style.display = 'block';
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
         memberDetails.style.display = 'none';
     }
     else if(memberDetails) {
         // Set a timeout to hide the member details section after 5 seconds
-        cat.style.display = 'none';
+        form.style.display = 'none';
         memberDetails.style.display = 'block';
         setTimeout(function() {
-            cat.style.display = 'block';
+            form.style.display = 'block';
             memberDetails.style.display = 'none';
         }, 5000); // 5000 milliseconds = 5 seconds
     }
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 setTimeout(updateCountdown, 1000); // Update countdown every second (1000 milliseconds)
             } else {
                 // If countdown is complete, hide the member details section
-                cat.style.display = 'cat';
+                form.style.display = 'form';
                 
             }
         }

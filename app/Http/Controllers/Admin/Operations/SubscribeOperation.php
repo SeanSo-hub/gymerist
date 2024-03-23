@@ -59,28 +59,32 @@ trait SubscribeOperation
      * @return Response
      */
     public function subscribe()
-    {
-        CRUD::hasAccessOrFail('subscribe');
+{
+    CRUD::hasAccessOrFail('subscribe');
 
-        $entry = $this->crud->getCurrentEntry();
+    $member = Member::find(request()->route('id'));
 
-        // prepare the fields you need to show
-        $this->data['crud'] = $this->crud;
-        $this->data['title'] = $this->crud->getTitle() ?? 'subscribe ' . $this->crud->entity_name;
-        $this->data['entry'] = $this->crud->getCurrentEntry();
-        // load the view
-        return view("crud::operations.subscribe", $this->data);
-        
-    }
+    $data = [
+        'crud' => $this->crud,
+        'title' => CRUD::getTitle() ?? 'Subscribe ' . $this->crud->entity_name,
+        'member' => $member,
+    ];
+
+
+    // load the view
+    return view("crud::operations.subscribe", $data);
+}
+
 
     public function postsubscribeForm(Request $request)
     {
         // Run validation
         $validator = Validator::make($request->all(), [
-            'amount' => 'required', // Allow amount to be optional
-            'subscription_status' => 'required',
-            'message' => 'nullable',
+            'payment_type' => 'required|in:cash,gcash',
+            'amount' => 'required|numeric',
+            'transaction_code' => 'nullable',
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -88,25 +92,16 @@ trait SubscribeOperation
         $entry = $this->crud->getCurrentEntry();
 
         try {
-    
-            $entry->update([
-                'amount' => $request->get('amount'),
-                'subscription_status' => $request->get('subscription_status'),
-                'subscription_date' => $request->get('subscription_date'),
-                'subscription_end_date' => $request->get('subscription_end_date'), // Assuming you want to store this as well
-                'message' => $request->get('message'),
-            ]);
-        
+
+            $entry->storePaymentInfo($request->get('payment_type'), $request->get('amount'), $request->get('transaction_code'));
+
             Alert::success('Subscription added')->flash();
 
             return redirect(url($this->crud->route));
         } catch (Exception $e) {
-            // Show error message
             Alert::error("Error, " . $e->getMessage())->flash();
 
             return redirect()->back()->withInput();
         }
     }
-
-
 }

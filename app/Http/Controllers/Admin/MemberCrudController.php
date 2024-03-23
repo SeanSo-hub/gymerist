@@ -2,13 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Member;
 use App\Http\Requests\MemberRequest;
-use Backpack\CRUD\app\Library\Widget;
-use Illuminate\Support\Facades\Route;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Faker\Guesser\Name;
 
 /**
  * Class MemberCrudController
@@ -56,16 +52,16 @@ class MemberCrudController extends CrudController
             ->label('Fullname')
             ->type('text');
 
+        CRUD::column('amount')
+            ->label('Amount')
+            ->type('text');
+
         CRUD::column('contact_number')
             ->label('Contact')
             ->type('text');  // Display the calculated fullname
 
         CRUD::column('subscription_status')
             ->label('Status')
-            ->type('text');
-
-        CRUD::column('status')
-            ->label('Plan Status')
             ->type('text');
 
         CRUD::column('subscription_end_date')

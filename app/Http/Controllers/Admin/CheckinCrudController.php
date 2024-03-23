@@ -26,7 +26,8 @@ class CheckinCrudController extends CrudController
      * @return void
      */
     public function setup()
-    {
+    {       
+        CRUD::setModel(\App\Models\Member::class);             
         CRUD::setModel(\App\Models\Checkin::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/checkin');
         CRUD::setEntityNameStrings('checkin', 'checkins');
@@ -40,22 +41,24 @@ class CheckinCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        //CRUD::setFromDb(); // set columns from db columns.
-        CRUD::column([
-            'name' => 'fullname', // The db column name
-            'label' => "Fullname", // Table column heading
-            'type' => 'Text',
-            'attribute' => 'fullname'
+        // CRUD::setFromDb(); // set columns from db columns.
+        
+        CRUD::addcolumn([
+            'name' => 'member.fullname', 
+            'label' => "Fullname", 
+            // 'attribute' => 'fullname',
+            // 'entity' => 'member'
         ]);
-        CRUD::column([
+        
+        CRUD::addcolumn([
             'name' => 'date',
             'label' => "Date",  // Update label to reflect both
             'type' => 'date', // Use 'text' for custom display
 
         ]);
-        CRUD::column([
-            'name' => 'time', 
-            'label' => "Time", 
+        CRUD::addcolumn([
+            'name' => 'time',
+            'label' => "Time",
             'type' => 'text',
             'value' => function ($entity) {
                 // Get the date value from the entity
@@ -90,7 +93,7 @@ class CheckinCrudController extends CrudController
     {
         CRUD::setValidation(CheckinRequest::class);
         CRUD::setFromDb(); // set fields from db columns.
-        
+
 
         /**
          * Fields can be defined using the fluent syntax:
@@ -108,6 +111,4 @@ class CheckinCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
-
-    
 }

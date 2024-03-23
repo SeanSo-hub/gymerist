@@ -11,8 +11,8 @@
         <i class="la la-chart-bar"></i> Reports
     </a>
     <div class="dropdown-menu" aria-labelledby="navbarDropdownDashboard">
-        <a class="dropdown-item" href="{{ route('checkin')}}"> <i class="la la-user-check"></i> Daily Checkins</a>
-        <a class="dropdown-item" href="#"> <i class="la la-user-friends"></i> Members</a>
-        <a class="dropdown-item" href="#"> <i class="la la-coins"></i> Payments</a>
+        <a class="dropdown-item" href="{{ route('checkins.index')}}"> <i class="la la-user-check"></i> Daily Checkins</a>
+        <a class="dropdown-item" href="{{ route('members.index')}}"> <i class="la la-user-friends"></i> Members</a>
+        <a class="dropdown-item" href="{{ route('payments.index')}}"> <i class="la la-coins"></i> Payments</a>
     </div>
 </li>
