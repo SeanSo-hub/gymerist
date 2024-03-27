@@ -15,10 +15,6 @@ use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 class CheckinCrudController extends CrudController
 {
     use \Backpack\CRUD\app\Http\Controllers\Operations\ListOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\CreateOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\UpdateOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\DeleteOperation;
-    // use \Backpack\CRUD\app\Http\Controllers\Operations\ShowOperation;
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
@@ -40,20 +36,16 @@ class CheckinCrudController extends CrudController
      * @return void
      */
     protected function setupListOperation()
-    {
-        // CRUD::setFromDb(); // set columns from db columns.
-        
+    {        
         CRUD::addcolumn([
             'name' => 'member.fullname', 
             'label' => "Fullname", 
-            // 'attribute' => 'fullname',
-            // 'entity' => 'member'
         ]);
         
         CRUD::addcolumn([
             'name' => 'date',
-            'label' => "Date",  // Update label to reflect both
-            'type' => 'date', // Use 'text' for custom display
+            'label' => "Date",  
+            'type' => 'date', 
 
         ]);
         CRUD::addcolumn([
@@ -61,17 +53,13 @@ class CheckinCrudController extends CrudController
             'label' => "Time",
             'type' => 'text',
             'value' => function ($entity) {
-                // Get the date value from the entity
                 $date = $entity->date;
 
-                // Check if date is not empty before converting to Carbon
                 if (!empty($date)) {
                     $carbon = new Carbon($date);
-                    // Format the time with AM/PM indicator
-                    return $carbon->format('h:i:s A'); // 'A' represents AM/PM
+                    return $carbon->format('h:i:s A'); 
                 } else {
-                    // Handle empty date case (optional)
-                    return ''; // or any default value for empty date
+                    return '';
                 }
             },
         ]);

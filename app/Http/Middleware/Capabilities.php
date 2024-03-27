@@ -37,7 +37,7 @@ class Capabilities
             case 'user.update':
             case 'user.destroy':
             case 'user.search':
-                return in_array('1', $capabilities); // Add New User
+                return in_array('1', $capabilities); // User access
             case 'member.index':
             case 'member.create':
             case 'member.store':
@@ -48,7 +48,7 @@ class Capabilities
             case 'member.search':
             case 'member.subscribe':
             case 'member.subscribe-add':
-                return in_array('2', $capabilities); // View Payment
+                return in_array('2', $capabilities); // Member access
             case 'payment.index':
             case 'payment.create':
             case 'payment.store':
@@ -57,21 +57,21 @@ class Capabilities
             case 'payment.update':
             case 'payment.destroy':
             case 'payment.search':
-                return in_array('3', $capabilities); // Accept Payments
+                return in_array('3', $capabilities); // Payment Access
             case 'checkins.index':
             case 'checkins.filter':
-                return in_array('4', $capabilities); // View Reports
+                return in_array('4', $capabilities); // Reports Access
             case 'members.index':
             case 'members.filter':
-                return in_array('5', $capabilities); // View Report Members
+                return in_array('5', $capabilities); 
             case 'payments.index':
             case 'payments.filter':
-                return in_array('6', $capabilities); // View Members
+                return in_array('6', $capabilities); 
             case 'cashflow.index':
             case 'cashflow.filter':
-                return in_array('7', $capabilities); // View Report Payments
+                return in_array('7', $capabilities); 
             default:
-                return false; // Default Route
+                return false; 
         }
     }
 }

@@ -1,71 +1,56 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if the member details section exists
+document.addEventListener('DOMContentLoaded', function () {
     var form = document.getElementById('form');
     var memberDetails = document.getElementById('member_details');
+    var userNotExistMessage = document.getElementById('userNotExist');
 
-    if (form.style.display === 'none') {
+    if (!memberDetails) {
         form.style.display = 'block';
-        memberDetails.style.display = 'none';
     }
-    else if(memberDetails) {
-        // Set a timeout to hide the member details section after 5 seconds
-        form.style.transition = 'opacity 0.5s ease-in, left 0.5s ease-in';
-        memberDetails.style.transition = 'opacity 0.5s ease-out, left 0.5s ease-out';
-        form.style.opacity = '0';
-        memberDetails.style.opacity = '1';
-        form.style.left = '0';
-        memberDetails.style.left = '0';
-        setTimeout(function() {
-            form.style.opacity = '1'; // Ensure the form is visible before fading out
-            memberDetails.style.opacity = '0'; // Fade out member details
-            memberDetails.style.left = '-100%'; // Swipe to the left
-            setTimeout(function() {
-                form.style.display = 'block';
-                memberDetails.style.display = 'none';
-                form.style.opacity = '1'; // Reset form opacity
-                form.style.left = '0';
-            }, 500); // Wait for the fade out transition to complete
-        }, 5000); // 5000 milliseconds = 5 seconds
+    if (memberDetails) {
+        memberDetails.style.display = 'block';
+        form.style.display = 'none';
+    }
+    if (userNotExistMessage) {
+        form.style.display = 'block';
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Check if the member details section exists
-    var memberDetails = document.getElementById('member_details');
+document.addEventListener('DOMContentLoaded', function () {
+    var memberDetails = document.getElementsByClassName('details')[0];
     if (memberDetails) {
         var countdownElement = document.getElementById('countdown');
-        var secondsLeft = 5; // Initial value for countdown
-        // Function to update countdown text
+        var secondsLeft = 5;
+
         function updateCountdown() {
             countdownElement.textContent = 'Closing in (' + secondsLeft + ') seconds...';
-            secondsLeft--; // Decrement secondsLeft
+            secondsLeft--;
+            console.log(secondsLeft);
             if (secondsLeft >= 0) {
-                // If there are seconds left, schedule the next update
-                setTimeout(updateCountdown, 1000); // Update countdown every second (1000 milliseconds)
+                setTimeout(updateCountdown, 1000);
             } else {
-                // If countdown is complete, hide the member details section
                 memberDetails.style.transition = 'opacity 0.5s ease-out, left 0.5s ease-out';
-                memberDetails.style.opacity = '0'; // Fade out member details
-                memberDetails.style.left = '-100%'; // Swipe to the left
-                setTimeout(function() {
+                memberDetails.style.opacity = '0';
+                memberDetails.style.left = '-100%';
+                setTimeout(function () {
                     memberDetails.style.display = 'none';
-                    memberDetails.style.opacity = '1'; // Reset opacity
-                    memberDetails.style.left = '0'; // Reset left position
-                }, 500); // Wait for the fade out transition to complete
+                    memberDetails.style.opacity = '1';
+                    memberDetails.style.left = '0';
+                    window.location.href = window.location.origin + window.location.pathname;
+                }, 500);
             }
         }
-        // Initial call to start the countdown
         updateCountdown();
     }
 });
 
-setTimeout(function() {
+
+setTimeout(function () {
     var userNotExistMessage = document.getElementById('userNotExist');
     if (userNotExistMessage) {
         userNotExistMessage.style.transition = 'opacity 0.5s ease-out';
         userNotExistMessage.style.opacity = '0';
-        setTimeout(function() {
+        setTimeout(function () {
             userNotExistMessage.style.display = 'none';
-        }, 500); // Wait for the fade out transition to complete
+        }, 500);
     }
 }, 3000);

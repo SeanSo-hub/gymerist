@@ -229,8 +229,8 @@ class Controller extends BaseController
                 break;
             case 'custom':
                 if ($startDate && $endDate) {
-                $total = Payment::whereBetween('created_at', [$startDate, $endDate])
-                    ->sum('amount');
+                    $total = Payment::whereBetween('created_at', [$startDate, $endDate])
+                        ->sum('amount');
                 }
                 break;
             case 'cash':

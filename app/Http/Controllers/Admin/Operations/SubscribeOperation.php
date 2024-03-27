@@ -33,18 +33,6 @@ trait SubscribeOperation
             'uses'      => $controller.'@postsubscribeForm',
             'operation' => 'subscribe',
         ]);
-
-        // Route::get($segment.'/{id}/plan', [
-        //     'as'        => $routeName.'.plan',
-        //     'uses'      => $controller.'@plan',
-        //     'operation' => 'subscribe',
-        // ]);
-
-        // Route::post($segment.'/{id}/plan', [
-        //     'as'        => $routeName.'.plan-add',
-        //     'uses'      => $controller.'@postPlanForm',
-        //     'operation' => 'subscribe',
-        // ]);
     }
 
     /**
@@ -59,11 +47,9 @@ trait SubscribeOperation
         });
 
         CRUD::operation('list', function () {
-            // CRUD::addButton('top', 'subscribe', 'view', 'crud::buttons.subscribe');
-            // CRUD::addButton('line', 'subscribe', 'view', 'crud::buttons.subscribe');
 
             $this->crud->addButton('line', 'subscribe', 'view', 'crud::buttons.subscribe');
-            // $this->crud->addButton('line', 'plan', 'view', 'crud::buttons.plan');
+
         });
     }
 
@@ -85,31 +71,13 @@ trait SubscribeOperation
             'member' => $member,
             'payment' => $payment,  
         ];
-
-
+        
         // load the view
         return view("crud::operations.subscribe", $data);
     }
 
-    // public function plan()
-    // {
-    //     CRUD::hasAccessOrFail('subscribe');
-
-    //     $payment = Payment::find(request()->route('id'));
-
-    //     $data = [
-    //         'crud' => $this->crud,
-    //         'title' => CRUD::getTitle() ?? 'Plan ' . $this->crud->entity_name,
-    //         'payment' => $payment,
-    //     ];
-    //     // load the view
-    //     return view("crud::operations.plan", $data);
-    // }
-
-
     public function postsubscribeForm(Request $request)
     {
-        // Run validation
         $validator = Validator::make($request->all(), [
             'payment_type' => 'required|in:cash,gcash',
             'amount' => 'required|numeric',
@@ -135,38 +103,4 @@ trait SubscribeOperation
             return redirect()->back()->withInput();
         }
     }
-
-
-    // public function postPlanForm(Request $request)
-    // {
-    //     // Run validation
-    //     $validator = Validator::make($request->all(), [
-    //         'plan_type' => 'required|in:session, monthly, quarterly, half-year, annual',
-    //         'payment_type' => 'required|in:cash,gcash',
-    //         'amount' => 'required|numeric',
-    //         'transaction_code' => 'nullable',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $entry = $this->crud->getCurrentEntry();
-
-    //     try {
-
-    //         $entry->storePlanInfo($request->get('plan_type'), $request->get('payment_type'), $request->get('amount'), $request->get('transaction_code'));
-
-    //         Alert::success('Plan added')->flash();
-
-    //         return redirect(url($this->crud->route));
-    //     } catch (Exception $e) {
-    //         Alert::error("Error, " . $e->getMessage())->flash();
-
-    //         return redirect()->back()->withInput();
-    //     }
-    // }
-
-
-
 }

@@ -49,7 +49,7 @@ class PaymentCrudController extends CrudController
             'attribute' => 'fullname'
         ]);
 
-        CRUD::setFromDb(); // set columns from db columns.
+        CRUD::setFromDb(); 
 
         $this->crud->removeColumn('member_id');
         $this->crud->removeColumn('date');
@@ -72,9 +72,6 @@ class PaymentCrudController extends CrudController
      */
     protected function setupCreateOperation()
     {
-        // CRUD::setValidation(PaymentRequest::class);
-        // // CRUD::setFromDb(); // set fields from db columns.
-
         CRUD::addField([
             'name' => 'member_id',
             'type' => 'select',
@@ -119,7 +116,6 @@ class PaymentCrudController extends CrudController
                 'annual' => 'Annual',],
             'allows_null' => false,
             'default'     => 'monthly',
-            // 'allows_multiple' => true, // OPTIONAL; needs you to cast this to array in your model;
         ]);
 
         Widget::add()->type('script')->content(asset('assets/js/admin/transaction.js'));
