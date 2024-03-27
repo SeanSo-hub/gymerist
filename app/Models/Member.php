@@ -68,7 +68,7 @@ class Member extends Model
         $this->attributes['code'] = $memberCode;
     }
 
-    public function storePaymentInfo($paymentType, $amount, $transactionCode = null)
+    public function storeSubscriptionInfo($paymentType, $amount, $transactionCode = null)
     {
 
         $this->payment_type = $paymentType;
@@ -78,10 +78,10 @@ class Member extends Model
 
             $this->subscription_status = 'active';
 
+
             $this->subscription_start_date = now();
             $this->subscription_end_date = now()->addYear();
         } else {
-
         }
 
         if (!is_null($transactionCode)) {
@@ -92,6 +92,7 @@ class Member extends Model
 
         return $this;
     }
+
 
     public static function getTotalSubscription()
     {
@@ -105,21 +106,5 @@ class Member extends Model
 
         return $subscriptionTotals + $planPaymentTotals;
     }
-
-    
-    // public static function getTotalCashPaymentsForAllMembers()
-    // {
-    //     $totalCashPayments = $member->getTotalAmountForCash();
-    //     $members = Member::all();
-
-    //     foreach ($members as $member) {
-    //         $totalCashPayments = $member->getTotalAmountForCash();
-    //     }
-
-    //     return $totalCashPayments;
-    // }
-
-    
-
 
 }

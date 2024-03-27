@@ -63,7 +63,7 @@ return [
     'home_link' => '/home',
 
     // Menu logo. You can replace this with an <img> tag if you have a logo.
-    'project_logo' => '<img src="/assets/images/' . (config('app.light_mode') ? 'gymerist_logo_light.png' : 'gymerist_logo.png') . '" width="100px" alt="Gymerist">',
+    'project_logo' => '<img src="/assets/images/' . (config('app.light_mode') ? 'gymerist_logo_light.png' : 'gymerist_logo_white.png') . '" width="100px" alt="Gymerist">',
 
 
     // Show / hide breadcrumbs on admin panel pages.

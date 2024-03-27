@@ -21,6 +21,11 @@
             display: flex;
             margin-left: 5px;
             align-content: space-between;
+            flex-grow: 1;
+        }
+
+        .group {
+            flex-grow: 1;
         }
 
         .filter-btn {
@@ -54,11 +59,15 @@
 
         <div class="form-group" id="custom_filter" style="display: none;">
             <div class="input-group">
-                <label for="start_date">Start Date</label>
-                <input type="date" id="start_date" name="start_date" class="form-control">
-                <label for="end_date">End Date</label>
-                <input type="date" id="end_date" name="end_date" class="form-control">
-            </div> 
+                <div class="group d-flex flex-column me-3">
+                    <label for="start_date">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control">
+                </div>
+                <div class="group d-flex flex-column">
+                    <label for="end_date">End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control">
+                </div>
+            </div>
         </div>
 
         <div class="form-group" id="month_filter" style="display: none;"> 

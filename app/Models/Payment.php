@@ -28,6 +28,9 @@ class Payment extends Model
         $plan_end_date = null;
 
         switch ($plan_type) {
+            case 'session':
+                $plan_end_date = Carbon::now()->addHours(24);
+                break;
             case 'monthly':
                 $plan_end_date = Carbon::now()->addMonth();
                 break;
@@ -92,5 +95,29 @@ class Payment extends Model
         $formattedDate = Carbon::now()->format('Y-m-d H:i:s');
         $checkin->date = $formattedDate;
         $checkin->save();
+    }
+
+    public function storePlanInfo($planType, $paymentType, $amount, $transactionCode = null)
+    {
+        $this->plan_type = $planType;
+        $this->payment_type = $paymentType;
+        $this->amount = $amount;
+
+        $this->plan_start_date = now();
+
+        if ($planType !== null) {
+            $this->plan_end_date = $this->calculateEndDate();
+            $this->plan_status = 'active';
+        } else {
+            $this->plan_status = 'inactive'; 
+        }
+
+        if (!is_null($transactionCode)) {
+            $this->transaction_code = $transactionCode;
+        }
+
+        $this->save();
+
+        return $this;
     }
 }

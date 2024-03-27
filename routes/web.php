@@ -22,23 +22,6 @@ Route::get('/home', [HomeController::class, 'showHomePage'])->name('home');
 
 Route::post('/home', [HomeController::class, 'submitForm']);
 
-Route::prefix('checkins')->group(function () {
-    Route::get('/', [Controller::class, 'showCheckin'])->name('checkins.index');
-    Route::get('/filter', [Controller::class, 'filter'])->name('checkins.filter');
-});
-
-Route::prefix('members')->group(function () {
-    Route::get('/', [Controller::class, 'showMember'])->name('members.index');
-    Route::get('/filter', [Controller::class, 'filter'])->name('members.filter');
-});
-
-Route::prefix('payments')->group(function () {
-    Route::get('/', [Controller::class, 'showPayment'])->name('payments.index');
-    Route::get('/filter', [Controller::class, 'filter'])->name('payments.filter');
-});
-
-
-
 
 
 

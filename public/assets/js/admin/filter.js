@@ -16,8 +16,43 @@ filterBySelect.addEventListener('change', function () {
     customFilter.style.display = selectedFilter === 'custom' ? 'block' : 'none'; // Show custom filter if selected
 });
 
+
+//for cashflow
+document.addEventListener('DOMContentLoaded', function () {
+
+    const customFilter = document.getElementById('custom_filter');
+    // Select the filter dropdown
+    const filterDropdown = document.getElementById('filter_by');
+
+    function toggleCustomFilterVisibility() {
+        const selectedFilter = filterDropdown.value;
+        customFilter.style.display = selectedFilter === 'custom' ? 'block' : 'none';
+    }
+
+    // Add an event listener to the filter dropdown to update the cards visibility and toggle custom filter visibility when the selected filter changes
+    filterDropdown.addEventListener('change', function() {
+        toggleCustomFilterVisibility();
+    });
+
+    toggleCustomFilterVisibility();
+});
+
+
+//for list filters
+
 function clearFilters() {
-    window.location.href = "/checkins";
+    // Create a new URL object from the current URL
+    const url = new URL(window.location.href);
+
+    // Use URLSearchParams to manipulate the query string
+    const params = new URLSearchParams(url.search);
+
+    // Delete all parameters
+    for (const key of params.keys()) {
+        params.delete(key);
+    }
+    
+    window.location.href = url.origin + url.pathname + '?';
 }
 
 

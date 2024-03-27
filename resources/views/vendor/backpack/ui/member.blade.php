@@ -32,7 +32,7 @@
     <!-- Page Heading -->
     <h1 class="text-capitalize ms-3" bp-section="page-heading">Members</h1>
 
-    <form class="container-fluid" action="{{ route('checkins.filter') }}" method="GET">
+    <form class="container-fluid" action="{{ route('members.filter') }}" method="GET">
         @csrf
         <div class="form-group">
             <label for="filter_by">Filter By</label>
@@ -47,8 +47,6 @@
             <div class="input-group">
                 <label for="start_date">Start Date</label>
                 <input type="date" id="start_date" name="start_date" class="form-control">
-            </div>  
-            <div class="input-group">
                 <label for="end_date">End Date</label>
                 <input type="date" id="end_date" name="end_date" class="form-control">
             </div> 
@@ -92,7 +90,7 @@
                                     <th scope="col">Code</th>
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Contact</th>
-                                    <th scope="col">Annual Status</th>
+                                    <th scope="col">Subscription Status</th>
                                     <th scope="col">Annual end Date</th>
                                 </tr>
                             </thead>
@@ -110,7 +108,7 @@
                         </table>
                         {{ $members->links() }}
                     @else
-                        <p>No checkins found.</p>
+                        <p>No members found.</p>
                     @endif
                 </div>
             </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Operations;
 
 use Exception;
 use App\Models\Member;
+use App\Models\Payment;
 use Illuminate\Http\Request;
 use Prologue\Alerts\Facades\Alert;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,18 @@ trait SubscribeOperation
             'uses'      => $controller.'@postsubscribeForm',
             'operation' => 'subscribe',
         ]);
+
+        // Route::get($segment.'/{id}/plan', [
+        //     'as'        => $routeName.'.plan',
+        //     'uses'      => $controller.'@plan',
+        //     'operation' => 'subscribe',
+        // ]);
+
+        // Route::post($segment.'/{id}/plan', [
+        //     'as'        => $routeName.'.plan-add',
+        //     'uses'      => $controller.'@postPlanForm',
+        //     'operation' => 'subscribe',
+        // ]);
     }
 
     /**
@@ -50,6 +63,7 @@ trait SubscribeOperation
             // CRUD::addButton('line', 'subscribe', 'view', 'crud::buttons.subscribe');
 
             $this->crud->addButton('line', 'subscribe', 'view', 'crud::buttons.subscribe');
+            // $this->crud->addButton('line', 'plan', 'view', 'crud::buttons.plan');
         });
     }
 
@@ -59,21 +73,38 @@ trait SubscribeOperation
      * @return Response
      */
     public function subscribe()
-{
-    CRUD::hasAccessOrFail('subscribe');
+    {
+        CRUD::hasAccessOrFail('subscribe');
 
-    $member = Member::find(request()->route('id'));
+        $member = Member::find(request()->route('id'));
+        $payment = $member->payments()->latest()->first();
 
-    $data = [
-        'crud' => $this->crud,
-        'title' => CRUD::getTitle() ?? 'Subscribe ' . $this->crud->entity_name,
-        'member' => $member,
-    ];
+        $data = [
+            'crud' => $this->crud,
+            'title' => CRUD::getTitle() ?? 'Subscribe ' . $this->crud->entity_name,
+            'member' => $member,
+            'payment' => $payment,  
+        ];
 
 
-    // load the view
-    return view("crud::operations.subscribe", $data);
-}
+        // load the view
+        return view("crud::operations.subscribe", $data);
+    }
+
+    // public function plan()
+    // {
+    //     CRUD::hasAccessOrFail('subscribe');
+
+    //     $payment = Payment::find(request()->route('id'));
+
+    //     $data = [
+    //         'crud' => $this->crud,
+    //         'title' => CRUD::getTitle() ?? 'Plan ' . $this->crud->entity_name,
+    //         'payment' => $payment,
+    //     ];
+    //     // load the view
+    //     return view("crud::operations.plan", $data);
+    // }
 
 
     public function postsubscribeForm(Request $request)
@@ -93,7 +124,7 @@ trait SubscribeOperation
 
         try {
 
-            $entry->storePaymentInfo($request->get('payment_type'), $request->get('amount'), $request->get('transaction_code'));
+            $entry->storeSubscriptionInfo($request->get('payment_type'), $request->get('amount'), $request->get('transaction_code'));
 
             Alert::success('Subscription added')->flash();
 
@@ -104,4 +135,38 @@ trait SubscribeOperation
             return redirect()->back()->withInput();
         }
     }
+
+
+    // public function postPlanForm(Request $request)
+    // {
+    //     // Run validation
+    //     $validator = Validator::make($request->all(), [
+    //         'plan_type' => 'required|in:session, monthly, quarterly, half-year, annual',
+    //         'payment_type' => 'required|in:cash,gcash',
+    //         'amount' => 'required|numeric',
+    //         'transaction_code' => 'nullable',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $entry = $this->crud->getCurrentEntry();
+
+    //     try {
+
+    //         $entry->storePlanInfo($request->get('plan_type'), $request->get('payment_type'), $request->get('amount'), $request->get('transaction_code'));
+
+    //         Alert::success('Plan added')->flash();
+
+    //         return redirect(url($this->crud->route));
+    //     } catch (Exception $e) {
+    //         Alert::error("Error, " . $e->getMessage())->flash();
+
+    //         return redirect()->back()->withInput();
+    //     }
+    // }
+
+
+
 }

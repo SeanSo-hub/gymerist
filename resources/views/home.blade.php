@@ -19,8 +19,8 @@
                 <input type="text" name="code" placeholder="Enter Code" autocomplete="off" required>
                 <button type="submit">Check In</button>
             </form>
-
-            <div class="details">
+            
+            <div class="details">   
         
                 <div id="member_details">
                     @if (isset($code) && !isset($member))

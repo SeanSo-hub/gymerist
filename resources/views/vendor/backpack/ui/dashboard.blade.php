@@ -2,16 +2,9 @@
 
 @php
 
-    $userCount = \App\Models\User::count();
     $memberCount = \App\Models\Member::count();
     $activeCount = \App\Models\Payment::count();
-
-
     $totalRevenue = App\Models\Member::getTotalRevenue();
-    $totalSubscription = App\Models\Member::getTotalSubscription();
-    $totalCash = App\Models\Payment::getTotalAmountForCash();
-    $totalGCash = App\Models\Payment::getTotalAmountForGCash();
-
 
     //add div row using 'div' widget and make other widgets inside it to be in a row
     Widget::add()
@@ -19,16 +12,6 @@
         ->type('div')
         ->class('row justify-content-center')
         ->content([
-            //widget made using fluent syntax
-            Widget::make()
-                ->type('progress')
-                ->class('card mb-3')
-                ->statusBorder('start') // start|top|bottom
-                ->accentColor('success') // primary|secondary|warning|danger|info
-                ->ribbon(['top', 'la-user']) // ['top|right|bottom']
-                ->progressClass('progress-bar')
-                ->value($userCount)
-                ->description('Admin users.'),
 
             Widget::make()
                 ->type('progress')
@@ -54,41 +37,11 @@
                 ->type('progress')
                 ->class('card mb-3')
                 ->statusBorder('start') // start|top|bottom
-                ->accentColor('warning') // primary|secondary|warning|danger|info
-                ->ribbon(['top', 'la-coins']) // ['top|right|bottom']
-                ->progressClass('progress-bar')
-                ->value($totalCash)
-                ->description('Total Revenue on Cash Payments.'),
-
-            Widget::make()
-                ->type('progress')
-                ->class('card mb-3')
-                ->statusBorder('start') // start|top|bottom
-                ->accentColor('warning') // primary|secondary|warning|danger|info
-                ->ribbon(['top', 'la-coins']) // ['top|right|bottom']
-                ->progressClass('progress-bar')
-                ->value($totalGCash)
-                ->description('Total Revenue on Gcash Payments.'),
-
-            Widget::make()
-                ->type('progress')
-                ->class('card mb-3')
-                ->statusBorder('start') // start|top|bottom
-                ->accentColor('warning') // primary|secondary|warning|danger|info
-                ->ribbon(['top', 'la-coins']) // ['top|right|bottom']
-                ->progressClass('progress-bar')
-                ->value($totalSubscription)
-                ->description('Total Revenue on Subscription'),
-
-            Widget::make()
-                ->type('progress')
-                ->class('card mb-3')
-                ->statusBorder('start') // start|top|bottom
-                ->accentColor('warning') // primary|secondary|warning|danger|info
+                ->accentColor('success') // primary|secondary|warning|danger|info
                 ->ribbon(['top', 'la-coins']) // ['top|right|bottom']
                 ->progressClass('progress-bar')
                 ->value($totalRevenue)
-                ->description('Total Revenue'),
+                ->description('Total Revenue (Subscription + Plan)'),
         ]);
 
     //you can also add Script & CSS to your page using 'script' & 'style' widget

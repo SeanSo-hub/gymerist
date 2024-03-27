@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Capability;
 use App\Http\Requests\UserRequest;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -42,6 +43,12 @@ class UserCrudController extends CrudController
     {
         CRUD::setFromDb(); // set columns from db columns.
 
+        CRUD::addColumn([
+            'name' => 'capabilities',
+            'label' => 'Capabilities',
+            'type' => 'text',
+        ]);
+
         /**
          * Columns can be defined using the fluent syntax:
          * - CRUD::column('price')->type('number');
@@ -58,6 +65,37 @@ class UserCrudController extends CrudController
     {
         CRUD::setValidation(UserRequest::class);
         CRUD::setFromDb(); // set fields from db columns.
+
+        CRUD::addField([
+            'name' => 'capabilities',
+            'label' => 'Capabilities',
+            'type' => 'text',
+        ]);
+
+        $labels = [
+            'Users',   
+            'Members',   
+            'Payments',     
+            'Reports - Checkins',        
+            'Reports - Members',        
+            'Reports - Payments',          
+            'Reports - Cash Flow',         
+        ];
+
+        for ($i = 0; $i < count($labels); $i++) {
+            CRUD::addField([
+                'name' => 'capabilities'.$i,
+                'label' => $labels[$i],
+                'type' => 'checkbox',
+                'attributes' => [
+                    'class' => 'capability-checkbox',
+                    'value' => $i + 1
+                ]
+            ]);
+
+        }
+
+        Widget::add()->type('script')->content(asset('assets/js/admin/checkbox.js'));
 
         /**
          * Fields can be defined using the fluent syntax:

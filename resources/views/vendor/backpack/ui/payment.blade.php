@@ -14,29 +14,32 @@
             margin-left: 5px;
             flex-grow: 1;
         }
+
         .input-group {
             display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            justify-content: flex-start;
+            margin-left: 5px;
+            align-content: space-between;
+            flex-grow: 1;
         }
+
+        .group {
+            flex-grow: 1;
+        }
+
         .filter-btn {
             margin-left: 5px;
         }
     </style>
 
-    <!-- Breadcrumb Navigation -->
     <nav aria-label="breadcrumb" class="d-flex justify-content-end me-3 mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="">Admin</a></li>
             <li class="breadcrumb-item"><a href="">Reports</a></li>
-            <li class="breadcrumb-item active"><a href="">Members</a></li>
+            <li class="breadcrumb-item active"><a href="">Payments</a></li>
         </ol>
     </nav>
 
-    <!-- Page Heading -->
-    <h1 class="text-capitalize ms-3" bp-section="page-heading">Members</h1>
+    <h1 class="text-capitalize ms-3" bp-section="page-heading">Payments</h1>
 
     <form class="container-fluid" action="{{ route('payments.filter') }}" method="GET">
         @csrf
@@ -49,16 +52,20 @@
                 <option value="year">Year</option>
             </select>
         </div>
+
         <div class="form-group" id="custom_filter" style="display: none;">
             <div class="input-group">
-                <label for="start_date">Start Date</label>
-                <input type="date" id="start_date" name="start_date" class="form-control">
-            </div>  
-            <div class="input-group">
-                <label for="end_date">End Date</label>
-                <input type="date" id="end_date" name="end_date" class="form-control">
-            </div> 
+                <div class="group d-flex flex-column me-3">
+                    <label for="start_date">Start Date</label>
+                    <input type="date" id="start_date" name="start_date" class="form-control">
+                </div>
+                <div class="group d-flex flex-column">
+                    <label for="end_date">End Date</label>
+                    <input type="date" id="end_date" name="end_date" class="form-control">
+                </div>
+            </div>
         </div>
+
         <div class="form-group" id="month_filter" style="display: none;"> <label for="month">Month</label>
             <select id="month" name="month" class="form-control">
                 <option value="">-- Select Month --</option>
@@ -83,7 +90,7 @@
 
         <div class="filter-btn">
             <button type="submit" class="btn btn-primary">Filter</button>
-            <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear</button>         
+            <button type="button" class="btn btn-secondary" onclick="clearFilters()">Clear</button>
         </div>
     </form>
 
@@ -103,18 +110,23 @@
                             </thead>
                             <tbody>
                                 @foreach ($payments as $payment)
-                                    <tr>
-                                        <td>{{ $members[$loop->index]->code }}</td>
-                                        <td>{{ $members[$loop->index]->fullname }}</td>
-                                        <td>{{ $payment->amount }}</td>
-                                        <td>{{ $payment->payment_type }}</td>
-                                    </tr>
+                                    @php
+                                        $member = $members->where('id', $payment->member_id)->first();
+                                    @endphp
+                                    @if ($member)
+                                        <tr>
+                                            <td>{{ $member->code }}</td>
+                                            <td>{{ $member->fullname }}</td>
+                                            <td>{{ $payment->amount }}</td>
+                                            <td>{{ $payment->payment_type }}</td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>
                         {{ $payments->links() }}
                     @else
-                        <p>No checkins found.</p>
+                        <p>No payments found.</p>
                     @endif
                 </div>
             </div>

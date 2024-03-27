@@ -41,8 +41,7 @@ class PaymentCrudController extends CrudController
      * @return void
      */
     protected function setupListOperation()
-    {   
-
+    {       
         CRUD::addcolumn([
             'name' => 'fullname',
             'label' => "Name",
@@ -53,6 +52,10 @@ class PaymentCrudController extends CrudController
         CRUD::setFromDb(); // set columns from db columns.
 
         $this->crud->removeColumn('member_id');
+        $this->crud->removeColumn('date');
+        $this->crud->removeColumn('plan_start_date');
+        $this->crud->removeColumn('payment_type');
+        $this->crud->removeColumn('transaction_code');
         // $this->crud->removeColumn('amount');
 
         /**
@@ -72,19 +75,23 @@ class PaymentCrudController extends CrudController
         // CRUD::setValidation(PaymentRequest::class);
         // // CRUD::setFromDb(); // set fields from db columns.
 
-        CRUD::addfield([
+        CRUD::addField([
             'name' => 'member_id',
             'type' => 'select',
             'label' => 'Fullname',
             'entity' => 'member',
             'attribute' => 'fullname',
-        ]);
 
+            'options'   => (function ($query) {
+                return $query->where('subscription_status', 'active')->get();
+            }),
+        ]);    
+        
         CRUD::field('amount')   
             ->type('number')
             ->label('Amount');
 
-        CRUD::addfield([   // select_from_array
+        CRUD::addfield([  
             'name'        => 'payment_type',
             'label'       => "Payment type",
             'type'        => 'enum',
@@ -93,7 +100,7 @@ class PaymentCrudController extends CrudController
                 'gcash' => 'GCash'],
             'allows_null' => false,
             'default'     => 'cash',
-            // 'allows_multiple' => true, // OPTIONAL; needs you to cast this to array in your model;
+
         ]);
 
         CRUD::field('transaction_code')
@@ -105,6 +112,7 @@ class PaymentCrudController extends CrudController
             'label'       => "Plan type",
             'type'        => 'enum',
             'options'     => [
+                'session' => 'Session',
                 'monthly' => 'Monthly', 
                 'quarterly' => 'Quarterly',
                 'half-year' => 'Half year',
