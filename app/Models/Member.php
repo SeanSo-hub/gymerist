@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Carbon;
-use Backpack\Basset\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,12 +46,10 @@ class Member extends Model
     {
         parent::boot();
 
-        // Creating event to generate and set the member code
         static::creating(function ($member) {
             $member->generateAndSetMemberCode();
         });
 
-        // Created event to update the member code with the actual ID
         static::created(function ($member) {
             $member->update(['code' => now()->format('md') . '-' . str_pad($member->id, 4, '0', STR_PAD_LEFT)]);
         });
@@ -73,10 +69,7 @@ class Member extends Model
         $this->amount = $amount;
 
         if ($paymentType !== null) {
-
             $this->subscription_status = 'active';
-
-
             $this->subscription_start_date = now();
             $this->subscription_end_date = now()->addYear();
         } else {
@@ -91,7 +84,6 @@ class Member extends Model
         return $this;
     }
 
-
     public static function getTotalSubscription()
     {
         return self::sum('amount');
@@ -103,15 +95,6 @@ class Member extends Model
         $planPaymentTotals = Payment::getTotalPlanRevenue();
 
         return $subscriptionTotals + $planPaymentTotals;
-    }
-
-    public function setPlanPayment() {
-
-        $subscriptionStatus = self::where('subscription_status', 'active');
-
-        if($subscriptionStatus) {
-            
-        }
     }
 
 }

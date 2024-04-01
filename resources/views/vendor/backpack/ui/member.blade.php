@@ -89,7 +89,7 @@
                                     <th scope="col">Fullname</th>
                                     <th scope="col">Contact</th>
                                     <th scope="col">Subscription Status</th>
-                                    <th scope="col">Annual end Date</th>
+                                    <th scope="col">End Date</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -69,7 +69,7 @@ class UserCrudController extends CrudController
         CRUD::addField([
             'name' => 'capabilities',
             'label' => 'Capabilities',
-            'type' => 'text',
+            'type' => 'hidden',
         ]);
 
         $labels = [

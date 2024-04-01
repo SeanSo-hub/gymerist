@@ -22,7 +22,7 @@ class CreatePaymentsTable extends Migration
             $table->date('plan_end_date')->nullable();          
             $table->enum('payment_type', ['cash', 'gcash'])->nullable();
             $table->string('transaction_code')->nullable();
-            $table->enum('plan_status', ['active', 'expired'])->nullable();
+            $table->enum('plan_status', ['active', 'expired'])->default('expired');
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
             $table->timestamps();
         });

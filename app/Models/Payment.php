@@ -16,7 +16,6 @@ class Payment extends Model
     protected $guarded = ['id'];
     protected $fillable = [];
 
-
     public function member()
     {
         return $this->belongsTo(Member::class);
@@ -48,7 +47,7 @@ class Payment extends Model
                 break;
         }
 
-        return $plan_end_date->toDateString();
+        return $plan_end_date;
     }
 
     protected static function boot()
@@ -87,7 +86,6 @@ class Payment extends Model
         return $cashTotals + $gcashTotals;
     }
 
-
     public function addToCheckins($memberId)
     {
         $checkin = new Checkin();
@@ -95,30 +93,6 @@ class Payment extends Model
         $formattedDate = Carbon::now()->format('Y-m-d H:i:s');
         $checkin->date = $formattedDate;
         $checkin->save();
-    }
-
-    public function storePlanInfo($planType, $paymentType, $amount, $transactionCode = null)
-    {
-        $this->plan_type = $planType;
-        $this->payment_type = $paymentType;
-        $this->amount = $amount;
-
-        $this->plan_start_date = now();
-
-        if ($planType !== null) {
-            $this->plan_end_date = $this->calculateEndDate();
-            $this->plan_status = 'active';
-        } else {
-            $this->plan_status = 'inactive'; 
-        }
-
-        if (!is_null($transactionCode)) {
-            $this->transaction_code = $transactionCode;
-        }
-
-        $this->save();
-
-        return $this;
     }
 
     public function updatePlanStatus()

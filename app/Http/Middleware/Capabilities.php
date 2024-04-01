@@ -48,6 +48,8 @@ class Capabilities
             case 'member.search':
             case 'member.subscribe':
             case 'member.subscribe-add':
+            case 'member.plan':
+            case 'member.plan-add':
                 return in_array('2', $capabilities); // Member access
             case 'payment.index':
             case 'payment.create':
@@ -57,21 +59,23 @@ class Capabilities
             case 'payment.update':
             case 'payment.destroy':
             case 'payment.search':
+            case 'member.plan':
+            case 'member.plan-add':
                 return in_array('3', $capabilities); // Payment Access
             case 'checkins.index':
             case 'checkins.filter':
                 return in_array('4', $capabilities); // Reports Access
             case 'members.index':
             case 'members.filter':
-                return in_array('5', $capabilities); 
+                return in_array('5', $capabilities);
             case 'payments.index':
             case 'payments.filter':
-                return in_array('6', $capabilities); 
+                return in_array('6', $capabilities);
             case 'cashflow.index':
             case 'cashflow.filter':
-                return in_array('7', $capabilities); 
+                return in_array('7', $capabilities);
             default:
-                return false; 
+                return false;
         }
     }
 }

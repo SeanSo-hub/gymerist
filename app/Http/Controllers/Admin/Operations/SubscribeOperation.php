@@ -69,7 +69,7 @@ trait SubscribeOperation
             'crud' => $this->crud,
             'title' => CRUD::getTitle() ?? 'Subscribe ' . $this->crud->entity_name,
             'member' => $member,
-            'payment' => $payment,  
+            'payment' => $payment, 
         ];
         
         // load the view

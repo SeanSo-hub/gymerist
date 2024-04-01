@@ -16,10 +16,10 @@ class MemberSeeder extends Seeder
     {
         DB::table('members')->insert([
             'code' => '0311-0001',
-            'firstname' => 'Sean',
-            'lastname' => 'Gonzaga',
+            'firstname' => 'Post',
+            'lastname' => 'Malone',
             'contact_number' => '09067247886',
-            'email' => 'sean@gmail.com',
+            'email' => 'posty@gmail.com',
             'amount' => '1000.00',
             'payment_type' => 'gcash',
             'transaction_code' => 's657gra51r5a67',

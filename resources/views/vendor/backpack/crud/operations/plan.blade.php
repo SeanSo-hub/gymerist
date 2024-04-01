@@ -4,7 +4,7 @@
     $defaultBreadcrumbs = [
         trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
         $crud->entity_name_plural => url($crud->route),
-        'Subscription' => false,
+        'Plan' => false,
     ];
     $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 
@@ -18,7 +18,7 @@
     <section class="container-fluid">
         <h2>
             <span class="text-capitalize">Members</span>
-            <small>Add subscription{!! $member->name !!}.</small>
+            <small>Add plan{!! $member->name !!}.</small>
             @if ($crud->hasAccess('list'))
                 <small>
                     <a href="{{ url($crud->route) }}" class="d-print-none font-sm">
@@ -57,23 +57,33 @@
                             <h1>{{ $member->code }}</h1>
                         </div>
 
-                        @if ($member->subscription_status === 'active')
-                            <div class="form-group col-md-6">
-                                <label for="">Subscription Status</label>
-                                <h1>{{ $member->subscription_status }}</h1>
-                            </div>
-                            <div class="form-group col-md-6">
-                                <label for="">Subscription expires on</label>
-                                <h1>{{ $member->subscription_end_date ? \Carbon\Carbon::parse($member->subscription_end_date)->format('F d, Y') : '-' }}
-                                </h1>
-                            </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Subscription Status</label>
+                            <h1>{{ $member->subscription_status }}</h1>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="">Subscription expires on</label>
+                            <h1>{{ $member->subscription_end_date ? \Carbon\Carbon::parse($member->subscription_end_date)->format('F d, Y') : '-' }}
+                            </h1>
+                        </div>
 
+                        @if ($member->subscription_status === 'expired')
+
+                        <div class="form-group col-md-12 text-center">
+                            <label for="">Note</label>
+                            <h1>Not Subscribed</h1>
+                        </div>
+                        
                         @else
                             <div class="form-group col-md-6">
-                                <label for="dropdown">Payment type</label>
+                                <label for="dropdown">Plan type</label>
                                 <select name="plan_type" class="form-control" id="planType">
                                     <option value="">--Select plan type--</option>
-                                    <option value="subscription">Subscription</option>
+                                    <option value="session">Session</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="half-year">Half-year</option>
+                                    <option value="annual">Annual</option>
                                 </select>
                             </div>
 
@@ -95,6 +105,7 @@
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="form-group col-md-6" id="transactionCodeField" style="display: none;">
                                 <label for="transactionCode">Transaction Code</label>
                                 <input type="text" name="transaction_code" id="transactionCode"
@@ -104,6 +115,7 @@
                                 @enderror
                             </div>
                         @endif
+
                     </div>
 
                     <script>
@@ -120,13 +132,13 @@
 
                 </div>
                 <div id="saveActions" class="form-group d-flex justify-content-end" style="margin-top: 14px">
-                    @if ($member->subscription_status === 'active')
+                    @if ($member->subscription_status === 'expired')
                         <a href="{{ url($crud->route) }}" class="btn btn-primary me-2"><span class="la la-arrow-left"></span>
                             &nbsp;back</a>
                     @else
                         <a href="{{ url($crud->route) }}" class="btn btn-default me-2"><span class="la la-ban"></span>
                             &nbsp;Cancel</a>
-                        <button type="submit" class="btn btn-primary">Add Subscription</button>
+                        <button type="submit" class="btn btn-primary">Add Plan</button>
                     @endif
                 </div>
             </form>
