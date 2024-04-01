@@ -17,9 +17,7 @@ use App\Http\Controllers\HomeController;
 */
 
 
-
 Route::get('/home', [HomeController::class, 'showHomePage'])->name('home');
-
 Route::post('/home', [HomeController::class, 'submitForm']);
 
 

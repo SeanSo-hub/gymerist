@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Payment;
 use App\Http\Requests\PaymentRequest;
 use Backpack\CRUD\app\Library\Widget;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
@@ -26,12 +27,11 @@ class PaymentCrudController extends CrudController
      * @return void
      */
     public function setup()
-    {   
+    {
         CRUD::setModel(\App\Models\Member::class);
         CRUD::setModel(\App\Models\Payment::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/payment');
         CRUD::setEntityNameStrings('payment', 'payments');
-
     }
 
     /**
@@ -41,7 +41,7 @@ class PaymentCrudController extends CrudController
      * @return void
      */
     protected function setupListOperation()
-    {       
+    {
         CRUD::addcolumn([
             'name' => 'fullname',
             'label' => "Name",
@@ -49,7 +49,7 @@ class PaymentCrudController extends CrudController
             'attribute' => 'fullname'
         ]);
 
-        CRUD::setFromDb(); 
+        CRUD::setFromDb();
 
         $this->crud->removeColumn('member_id');
         $this->crud->removeColumn('date');
@@ -82,29 +82,26 @@ class PaymentCrudController extends CrudController
             'options'   => (function ($query) {
                 return $query->where('subscription_status', 'active')->get();
             }),
-        ]);    
-        
-        CRUD::field('amount')   
+        ]);
+
+        CRUD::field('amount')
             ->type('number')
             ->label('Amount');
 
-        CRUD::addfield([  
+        CRUD::addfield([
             'name'        => 'payment_type',
             'label'       => "Payment type",
             'type'        => 'enum',
             'options'     => [
-                'cash' => 'Cash', 
-                'gcash' => 'GCash'],
+                'cash' => 'Cash',
+                'gcash' => 'GCash'
+            ],
             'allows_null' => false,
             'default'     => 'cash',
 
         ]);
 
-        CRUD::field('transaction_code')
-            ->type('text')
-            ->label('Transaction Code');
-
-        CRUD::field([   // select_from_array
+        CRUD::field([  
             'name'        => 'plan_type',
             'label'       => "Plan type",
             'type'        => 'enum',
@@ -115,12 +112,12 @@ class PaymentCrudController extends CrudController
                 'half-year' => 'Half year',
                 'annual' => 'Annual',],
             'allows_null' => false,
-            'default'     => 'monthly',
+            'default'     => 'Session',
         ]);
 
         Widget::add()->type('script')->content(asset('assets/js/admin/transaction.js'));
 
-        
+
 
         /**
          * Fields can be defined using the fluent syntax:
@@ -138,4 +135,12 @@ class PaymentCrudController extends CrudController
     {
         $this->setupCreateOperation();
     }
+
+    // public function checkPaymentStatus() {
+    //     $paymentType = Payment::where('payment_type');
+
+    //     if ($paymentType === 'session') {
+
+    //     }
+    // }
 }

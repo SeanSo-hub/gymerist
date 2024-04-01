@@ -1,18 +1,17 @@
 @extends(backpack_view('blank'))
 
 @php
-$defaultBreadcrumbs = [
-    trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
-    $crud->entity_name_plural => url($crud->route),
-    'Subscription' => false,
-];
-// if breadcrumbs aren't defined in the CrudController, use the default breadcrumbs
-$breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
+    $defaultBreadcrumbs = [
+        trans('backpack::crud.admin') => url(config('backpack.base.route_prefix'), 'dashboard'),
+        $crud->entity_name_plural => url($crud->route),
+        'Subscription' => false,
+    ];
+    $breadcrumbs = $breadcrumbs ?? $defaultBreadcrumbs;
 
-$statuses = [
-    'active' => 'Active',
-    'expired' => 'Expired',
-]; // Modify this array as needed for your statuses
+    $statuses = [
+        'active' => 'Active',
+        'expired' => 'Expired',
+    ];
 @endphp
 
 @section('header')
@@ -51,26 +50,53 @@ $statuses = [
                     <div class="card-body row">
                         <div class="form-group col-md-6">
                             <label for="">Name</label>
-                            <h1>{{$member->fullname}}</h1>
+                            <h1>{{ $member->fullname }}</h1>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="">Code</label>
-                            <h1>{{$member->code}}</h1>
+                            <h1>{{ $member->code }}</h1>
                         </div>
-                    
-                        @if($member->subscription_status === 'active')
+
+                        @if ($member->subscription_status === 'active')
                             <div class="form-group col-md-6">
                                 <label for="">Subscription Status</label>
-                                <h1>{{$member->subscription_status}}</h1>
+                                <h1>{{ $member->subscription_status }}</h1>
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="">Subscription expires on</label>
-                                <h1>{{ $member->subscription_end_date ? \Carbon\Carbon::parse($member->subscription_end_date)->format('F d, Y') : '-' }}</h1>
+                                <h1>{{ $member->subscription_end_date ? \Carbon\Carbon::parse($member->subscription_end_date)->format('F d, Y') : '-' }}
+                                </h1>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="dropdown">Payment type</label>
+                                <select name="plan_type" class="form-control" id="planType">
+                                    <option value="">--Select plan type--</option>
+                                    <option value="session">Session</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="half-year">Half-year</option>
+                                    <option value="annual">Annual</option>
+                                </select>
                             </div>
                         @else
                             <div class="form-group col-md-6">
                                 <label for="dropdown">Payment type</label>
-                                <select name="payment_type" class="form-control" id="paymentType" onclick="toggleTransactionCode()">
+                                <select name="plan_type" class="form-control" id="planType">
+                                    <option value="">--Select plan type--</option>
+                                    <option value="subscription">Subscription</option>
+                                    {{-- <option value="session">Session</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="quarterly">Quarterly</option>
+                                    <option value="half-year">Half-year</option>
+                                    <option value="annual">Annual</option> --}}
+                                </select>
+                            </div>
+
+                            <div class="form-group col-md-6">
+                                <label for="dropdown">Payment type</label>
+                                <select name="payment_type" class="form-control" id="paymentType"
+                                    onclick="toggleTransactionCode()">
                                     <option value="">--Select payment type--</option>
                                     <option value="cash">Cash</option>
                                     <option value="gcash">Gcash</option>
@@ -78,21 +104,23 @@ $statuses = [
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="amount">Amount</label>
-                                <input type="number" name="amount" id="amount" class="form-control @error('amount') is-invalid @enderror">
+                                <input type="number" name="amount" id="amount"
+                                    class="form-control @error('amount') is-invalid @enderror">
                                 @error('amount')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group col-md-12" id="transactionCodeField" style="display: none;">
                                 <label for="transactionCode">Transaction Code</label>
-                                <input type="text" name="transaction_code" id="transactionCode" class="form-control @error('transactionCode') is-invalid @enderror">
+                                <input type="text" name="transaction_code" id="transactionCode"
+                                    class="form-control @error('transactionCode') is-invalid @enderror">
                                 @error('transactionCode')
                                     <div class="invalid-feedback d-block">{{ $message }}</div>
                                 @enderror
                             </div>
-                        @endif    
+                        @endif
                     </div>
-                    
+
                     <script>
                         function toggleTransactionCode() {
                             var paymentType = document.getElementById('paymentType').value;
@@ -104,14 +132,16 @@ $statuses = [
                             }
                         }
                     </script>
-                    
+
                 </div>
-                <div id="saveActions" class="form-group d-flex justify-content-end" style="margin-top: 14px" >
-                    @if($member->subscription_status === 'active')
-                    <a href="{{ url($crud->route) }}" class="btn btn-primary"><span class="la la-arrow-left"></span> &nbsp;back</a>
+                <div id="saveActions" class="form-group d-flex justify-content-end" style="margin-top: 14px">
+                    @if ($member->subscription_status === 'active')
+                        <a href="{{ url($crud->route) }}" class="btn btn-primary"><span class="la la-arrow-left"></span>
+                            &nbsp;back</a>
                     @else
-                    <a href="{{ url($crud->route) }}" class="btn btn-default"><span class="la la-ban"></span> &nbsp;Cancel</a>
-                    <button type="submit" class="btn btn-primary">Add Subscription</button>
+                        <a href="{{ url($crud->route) }}" class="btn btn-default"><span class="la la-ban"></span>
+                            &nbsp;Cancel</a>
+                        <button type="submit" class="btn btn-primary">Add Subscription</button>
                     @endif
                 </div>
             </form>
@@ -119,7 +149,8 @@ $statuses = [
 
         <div class="form-group col-md-12" id="transactionCodeField" style="display: none;">
             <label for="transactionCode">Payment History</label>
-            <input type="text" name="transaction_code" id="transactionCode" class="form-control @error('transactionCode') is-invalid @enderror">
+            <input type="text" name="transaction_code" id="transactionCode"
+                class="form-control @error('transactionCode') is-invalid @enderror">
             @error('transactionCode')
                 <div class="invalid-feedback d-block">{{ $message }}</div>
             @enderror

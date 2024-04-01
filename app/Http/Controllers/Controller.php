@@ -60,8 +60,8 @@ class Controller extends BaseController
         $weekNumber = $request->input('week');
         $month = $request->input('month');
         $year = $request->input('year');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $startDate = Carbon::parse($request->input('start_date'));
+        $endDate = Carbon::parse($request->input('end_date'));
 
         $query = Checkin::query();
 
@@ -79,15 +79,14 @@ class Controller extends BaseController
                 break;
 
             case 'custom':
-
-
-                if ($startDate && $endDate) {
-                    $query->whereBetween('date', [$startDate, $endDate]);
+                if ($startDate->isSameDay($endDate)) {
+                    $query->whereDate('created_at', $startDate);
+                } else {
+                    $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
                 break;
 
             default:
-                // No filter applied
                 break;
         }
 
@@ -109,8 +108,8 @@ class Controller extends BaseController
         $weekNumber = $request->input('week');
         $month = $request->input('month');
         $year = $request->input('year');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $startDate = Carbon::parse($request->input('start_date'));
+        $endDate = Carbon::parse($request->input('end_date'));
 
         $query = Member::query();
 
@@ -128,15 +127,14 @@ class Controller extends BaseController
                 break;
 
             case 'custom':
-
-
-                if ($startDate && $endDate) {
+                if ($startDate->isSameDay($endDate)) {
+                    $query->whereDate('created_at', $startDate);
+                } else {
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
                 break;
 
             default:
-                // No filter applied
                 break;
         }
 
@@ -159,8 +157,8 @@ class Controller extends BaseController
         $filterBy = $request->input('filter_by');
         $month = $request->input('month');
         $year = $request->input('year');
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $startDate = Carbon::parse($request->input('start_date'));
+        $endDate = Carbon::parse($request->input('end_date'));
 
         $query = Payment::query();
 
@@ -178,7 +176,9 @@ class Controller extends BaseController
                 break;
 
             case 'custom':
-                if ($startDate && $endDate) {
+                if ($startDate->isSameDay($endDate)) {
+                    $query->whereDate('created_at', $startDate);
+                } else {
                     $query->whereBetween('created_at', [$startDate, $endDate]);
                 }
                 break;
@@ -195,13 +195,12 @@ class Controller extends BaseController
 
     public function cashflowFilter(Request $request)
     {
-        // Define the function to get total based on filter
         $filterBy = $request->input('filter_by');
         $month = $request->input('month');
         $year = $request->input('year');
         $currentDate = Carbon::now();
-        $startDate = $request->input('start_date');
-        $endDate = $request->input('end_date');
+        $startDate = Carbon::parse($request->input('start_date'));
+        $endDate = Carbon::parse($request->input('end_date'));
 
         $total = 0;
 
@@ -223,12 +222,15 @@ class Controller extends BaseController
                     ->sum('amount');
                 break;
             case 'year':
-                $currentDate->startOfYear(); // Set date to the beginning of the year
-                $total = Payment::whereYear('created_at', $currentDate->year) // Use $currentDate->year
+                $currentDate->startOfYear();
+                $total = Payment::whereYear('created_at', $currentDate->year)
                     ->sum('amount');
                 break;
             case 'custom':
-                if ($startDate && $endDate) {
+                if ($startDate->isSameDay($endDate)) {
+                    $total = Payment::whereDate('created_at', $startDate)
+                        ->sum('amount');
+                } else {
                     $total = Payment::whereBetween('created_at', [$startDate, $endDate])
                         ->sum('amount');
                 }
@@ -245,8 +247,6 @@ class Controller extends BaseController
             default:
                 break;
         }
-
-        // Pass data to the view
         return view('vendor/backpack/ui/cashflow', compact('total'));
     }
 }

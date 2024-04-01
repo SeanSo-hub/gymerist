@@ -61,21 +61,9 @@ class MembershipCrudController extends CrudController
         CRUD::addcolumn([
             'name' => 'plan_status', 
             'label' => "Plan Status", 
-            // 'attribute' => 'plan_status',
-            // 'entity' => 'member'
         ]);
 
-        // CRUD::addcolumn([
-        //     'name' => 'plan_type', 
-        //     'label' => "Plan", 
-        //     'attribute' => 'plan_type',
-        //     'entity' => 'payment'
-        // ]);
-
-        
-
-        CRUD::setFromDb(); // set columns from db columns.
-
+        CRUD::setFromDb(); 
 
         $this->crud->removeColumn('plan_start_date');    
         $this->crud->removeColumn('firstname');
@@ -85,7 +73,6 @@ class MembershipCrudController extends CrudController
         $this->crud->removeColumn('email');
         $this->crud->removeColumn('amount');
         $this->crud->removeColumn('member_id'); 
-        // $this->crud->removeColumn('plan_type'); 
         $this->crud->removeColumn('payment_type'); 
         $this->crud->removeColumn('transaction_code');
 

@@ -42,8 +42,6 @@ class MemberCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        // CRUD::setFromDb(); // set columns from db columns.
         CRUD::column('code')
             ->label('Code')
             ->type('text'); 
@@ -58,7 +56,7 @@ class MemberCrudController extends CrudController
 
         CRUD::column('contact_number')
             ->label('Contact')
-            ->type('text');  // Display the calculated fullname
+            ->type('text');  
 
         CRUD::column('subscription_status')
             ->label('Status')
@@ -83,7 +81,6 @@ class MemberCrudController extends CrudController
     protected function setupCreateOperation()
     {
         CRUD::setValidation(MemberRequest::class);
-        // CRUD::setFromDb(); // set fields from db columns.
 
         CRUD::field('firstname')
             ->type('text')

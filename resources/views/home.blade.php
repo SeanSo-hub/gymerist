@@ -21,11 +21,11 @@
                     <button type="submit">Check In</button>
                 </form>
             @endif
-            
+
             <div class="details">
                 @if (isset($code) && !isset($member))
                     <div id="member_details">
-                        <p id="userNotExist" style="color: red; animation: blink 1s infinite;">Code does not exist</p>
+                        <p id="userNotExist" style="color: red; animation: blink 1s infinite;">Member code does not exist</p>
                     @elseif(isset($code))
                         <h2>Member Details:</h2>
                         <p>Fullname: {{ $member->firstname . ' ' . $member->lastname ?? 'N/A' }}</p>

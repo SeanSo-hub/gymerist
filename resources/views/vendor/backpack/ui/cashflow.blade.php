@@ -31,7 +31,6 @@
         }
     </style>
 
-    <!-- Breadcrumb Navigation -->
     <nav aria-label="breadcrumb" class="d-flex justify-content-end me-3 mb-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="">Admin</a></li>
@@ -40,7 +39,6 @@
         </ol>
     </nav>
 
-    <!-- Page Heading -->
     <h1 class="text-capitalize ms-3" bp-section="page-heading">Cash flow</h1>
 
     <form class="container-fluid" action="{{ route('cashflow.filter') }}" method="GET">

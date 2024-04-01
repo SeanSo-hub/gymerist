@@ -25,7 +25,6 @@ class MemberRequest extends FormRequest
     public function rules()
     {
         return [
-            // 'name' => 'required|min:5|max:255'
             'firstname' => 'required',
             'lastname' => 'required',
             'contact_number' => 'required',

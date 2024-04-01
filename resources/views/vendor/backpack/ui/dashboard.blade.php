@@ -5,8 +5,7 @@
     $memberCount = \App\Models\Member::count();
     $activeCount = \App\Models\Payment::count();
     $totalRevenue = App\Models\Member::getTotalRevenue();
-
-    //add div row using 'div' widget and make other widgets inside it to be in a row
+    
     Widget::add()
         ->to('before_content')
         ->type('div')
@@ -44,7 +43,6 @@
                 ->description('Total Revenue (Subscription + Plan)'),
         ]);
 
-    //you can also add Script & CSS to your page using 'script' & 'style' widget
     Widget::add()
         ->type('script')
         ->stack('after_scripts')

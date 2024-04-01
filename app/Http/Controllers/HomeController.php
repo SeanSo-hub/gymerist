@@ -33,13 +33,12 @@ class HomeController extends Controller
             $payment = null;
         } else {
 
-            $memberId = $member->id;  // Retrieve the member ID
+            $memberId = $member->id;  
             $payment->addToCheckins($memberId); 
         }
 
 
         return view('home', ['code' => $code, 'member' => $member, 'payment' => $payment]);
     }
-
-
+    
 }

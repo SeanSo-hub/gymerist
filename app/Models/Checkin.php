@@ -13,8 +13,6 @@ class Checkin extends Model
 
 
     protected $table = 'checkins';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
     ];

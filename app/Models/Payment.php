@@ -91,7 +91,7 @@ class Payment extends Model
     public function addToCheckins($memberId)
     {
         $checkin = new Checkin();
-        $checkin->member_id = $memberId; // Use the provided member_id
+        $checkin->member_id = $memberId; 
         $formattedDate = Carbon::now()->format('Y-m-d H:i:s');
         $checkin->date = $formattedDate;
         $checkin->save();
@@ -120,4 +120,13 @@ class Payment extends Model
 
         return $this;
     }
+
+    public function updatePlanStatus()
+    {
+        if ($this->plan_end_date !== null && $this->plan_end_date->isPast()) {
+            $this->plan_status = 'expired';
+            $this->save();
+        }
+    }
+
 }

@@ -15,8 +15,6 @@ class Member extends Model
 
 
     protected $table = 'members';
-    // protected $primaryKey = 'id';
-    // public $timestamps = false;
     protected $guarded = ['id'];
     protected $fillable = [
         'code',
@@ -105,6 +103,15 @@ class Member extends Model
         $planPaymentTotals = Payment::getTotalPlanRevenue();
 
         return $subscriptionTotals + $planPaymentTotals;
+    }
+
+    public function setPlanPayment() {
+
+        $subscriptionStatus = self::where('subscription_status', 'active');
+
+        if($subscriptionStatus) {
+            
+        }
     }
 
 }
