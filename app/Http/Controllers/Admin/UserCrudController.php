@@ -73,9 +73,9 @@ class UserCrudController extends CrudController
         ]);
 
         $labels = [
-            'Users',   
-            'Members',   
-            'Payments',     
+            'View Users and Members',   
+            'Add Payments',   
+            'View Payments',     
             'Reports - Checkins',        
             'Reports - Members',        
             'Reports - Payments',          

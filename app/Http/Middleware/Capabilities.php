@@ -30,14 +30,17 @@ class Capabilities
 
         switch ($routeName) {
             case 'user.index':
-            case 'user.create':
-            case 'user.store':
             case 'user.show':
+            case 'user.store':
+            case 'user.search':
+            case 'member.index':
+            case 'member.subscribe':
+            case 'member.plan':
+                return in_array('1', $capabilities); // View User and Member
+            case 'user.create':
             case 'user.edit':
             case 'user.update':
-            case 'user.destroy':
-            case 'user.search':
-                return in_array('1', $capabilities); // User access
+            case 'user.destroy': 
             case 'member.index':
             case 'member.create':
             case 'member.store':
@@ -50,7 +53,7 @@ class Capabilities
             case 'member.subscribe-add':
             case 'member.plan':
             case 'member.plan-add':
-                return in_array('2', $capabilities); // Member access
+                return in_array('2', $capabilities); // Payments access
             case 'payment.index':
             case 'payment.create':
             case 'payment.store':
